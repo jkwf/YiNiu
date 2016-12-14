@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="GroupMemberListCell" id="gTV-IL-0wX" customClass="GroupMemberListCell">
+            <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="pGu-5s-GxZ">
+                        <rect key="frame" x="20" y="10" width="40" height="40"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="pGu-5s-GxZ" secondAttribute="height" multiplier="1:1" id="lhj-pN-R6h"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="张三" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rLh-Mu-HBj">
+                        <rect key="frame" x="8" y="55" width="64" height="17"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="pGu-5s-GxZ" secondAttribute="trailing" constant="20" id="1jL-LR-Z7J"/>
+                <constraint firstItem="pGu-5s-GxZ" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" constant="-10" id="MFv-UC-m0r"/>
+                <constraint firstItem="pGu-5s-GxZ" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="NeO-jg-jxC"/>
+                <constraint firstItem="pGu-5s-GxZ" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="20" id="QPn-IX-cx3"/>
+                <constraint firstAttribute="trailing" secondItem="rLh-Mu-HBj" secondAttribute="trailing" constant="8" id="lqz-aM-egp"/>
+                <constraint firstItem="rLh-Mu-HBj" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="8" id="nD9-pS-BLW"/>
+                <constraint firstItem="rLh-Mu-HBj" firstAttribute="top" secondItem="pGu-5s-GxZ" secondAttribute="bottom" constant="5" id="x6N-sM-B43"/>
+                <constraint firstAttribute="bottom" secondItem="rLh-Mu-HBj" secondAttribute="bottom" constant="8" id="xJm-BO-y7W"/>
+            </constraints>
+            <connections>
+                <outlet property="_head" destination="pGu-5s-GxZ" id="Cf9-za-ZYg"/>
+                <outlet property="_name" destination="rLh-Mu-HBj" id="EEs-FC-6gt"/>
+            </connections>
+        </collectionViewCell>
+    </objects>
+</document>

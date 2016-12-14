@@ -7,21 +7,93 @@
 //
 
 #import "AppDelegate.h"
-#import "DetailViewController.h"
+#import "MainViewController.h"
+#import "FirstViewController.h"
+#import "Header.h"
 
-@interface AppDelegate () <UISplitViewControllerDelegate>
+@interface AppDelegate () <UISplitViewControllerDelegate,UIAlertViewDelegate>
+
+
 
 @end
 
 @implementation AppDelegate
 
+- (void)showAlert{
+    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"您的账号在其他地点登录" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+    [alert show];
+    
+
+}
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    MainViewController *vc = [[MainViewController alloc]init];
+    UINavigationController *nav = (UINavigationController *)self.window.rootViewController;
+    [nav pushViewController:vc animated:YES];
+    NSLog(@"--------%@",[self.window.rootViewController class]);
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
-    UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;
-    UINavigationController *navigationController = [splitViewController.viewControllers lastObject];
-    navigationController.topViewController.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem;
-    splitViewController.delegate = self;
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(showAlert) name:@"loginOutByAnother" object:nil];;
+    
+    
+    
+    
+    /**
+     设置返回键
+
+     @param 0 <#0 description#>
+     @param -60 <#-60 description#>
+     @return <#return value description#>
+     */
+    [[UINavigationBar appearance]setTintColor:[UIColor whiteColor]];
+    [[UIBarButtonItem appearance] setBackButtonTitlePositionAdjustment:UIOffsetMake(0, -60) forBarMetrics:UIBarMetricsDefault];
+    
+    [[CoreDataTool shareData] initCoredata];
+
+    //[self getTurn];
+    [[SocketOprationData shareInit] initSocket];
+     [SMSSDK registerApp:appKey withSecret:appSecret];
+    
+    
+//    //注册环信
+//    [[EaseMob sharedInstance]registerSDKWithAppKey:@"easytrader#easytrader" apnsCertName:@""];
+    //AppKey:注册的AppKey，详细见下面注释。
+    //apnsCertName:推送证书名（不需要加后缀），详细见下面注释。
+//    EMOptions *options = [EMOptions optionsWithAppkey:@"easytrader#easytrader"];
+////    options.apnsCertName = @"istore_dev";
+//    [[EMClient sharedClient] initializeSDKWithOptions:options];
+    
+    self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
+    self.window.backgroundColor = [UIColor whiteColor];
+//    BOOL isAutoLogin = [[EaseMob sharedInstance].chatManager isAutoLoginEnabled];
+    
+    if (LoginUserId){
+        FirstViewController *firstVc = [[FirstViewController alloc]init];
+        UINavigationController *rootNav = [[UINavigationController alloc]initWithRootViewController:firstVc];
+        self.window.rootViewController = rootNav;
+    }
+    else
+    {
+        MainViewController *mainVc = [[MainViewController alloc]init];
+        UINavigationController *rootNav = [[UINavigationController alloc]initWithRootViewController:mainVc];
+        self.window.rootViewController = rootNav;
+
+   }
+
+
+    [self.window makeKeyAndVisible];
+    //    //设置状态栏的字体颜色模式
+    
+    //    改变状态栏的背景色
+//    UIView *statusBarView=[[UIView alloc] initWithFrame:CGRectMake(0, 0, self.window.frame.size.width, 20)];
+//    
+//    statusBarView.backgroundColor=[UIColor whiteColor];
+////    statusBarView.alpha = 0.5;
+//    
+//    [self.window addSubview:statusBarView];
+    
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:NO];
     return YES;
 }
 
@@ -31,11 +103,15 @@
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
+//    [[EMClient sharedClient] applicationDidEnterBackground:application];
+//    [[EaseMob sharedInstance] applicationDidEnterBackground:application];
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
+//    [[EaseMob sharedInstance] applicationWillEnterForeground:application];
+//    [[EMClient sharedClient] applicationWillEnterForeground:application];
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
 }
 
@@ -47,15 +123,18 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
-#pragma mark - Split view
 
-- (BOOL)splitViewController:(UISplitViewController *)splitViewController collapseSecondaryViewController:(UIViewController *)secondaryViewController ontoPrimaryViewController:(UIViewController *)primaryViewController {
-    if ([secondaryViewController isKindOfClass:[UINavigationController class]] && [[(UINavigationController *)secondaryViewController topViewController] isKindOfClass:[DetailViewController class]] && ([(DetailViewController *)[(UINavigationController *)secondaryViewController topViewController] detailItem] == nil)) {
-        // Return YES to indicate that we have handled the collapse by doing nothing; the secondary controller will be discarded.
-        return YES;
-    } else {
-        return NO;
-    }
+- (void)getTurn{
+    
+    [WebShareData getDataFromWebWithParams:nil contentType:@"text/plain" urlString:GetTurnServer successBlock:^(NSDictionary *dicInfo) {
+        [[NSUserDefaults standardUserDefaults] setObject:dicInfo[@"userName"] forKey:@"TurnUserName"];
+        [[NSUserDefaults standardUserDefaults] setObject:dicInfo[@"password"] forKey:@"TurnPassword"];
+        [[NSUserDefaults standardUserDefaults] setObject:dicInfo[@"urls"] forKey:@"TurnUrl"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    } failBlock:^(NSError *error) {
+        
+    }];
 }
+
 
 @end
