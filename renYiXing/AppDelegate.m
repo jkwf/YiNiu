@@ -73,8 +73,7 @@
         UINavigationController *rootNav = [[UINavigationController alloc]initWithRootViewController:firstVc];
         self.window.rootViewController = rootNav;
     }
-    else
-    {
+    else{
         MainViewController *mainVc = [[MainViewController alloc]init];
         UINavigationController *rootNav = [[UINavigationController alloc]initWithRootViewController:mainVc];
         self.window.rootViewController = rootNav;

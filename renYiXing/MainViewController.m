@@ -258,6 +258,7 @@
         NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:@{@"password":self.passTextField.text,@"phone":self.nameTextField.text,@"mod":@"interface",@"ac":@"login"}];
     
         [[WDAlert shareAlert] showLodingWithTitle:@""];
+        
         [WebShareData getDataFromWebWithParams:dic urlString:getAPIURL(@"mod=interface&ac=login") successBlock:^(NSDictionary *dicInfo) {
             [[WDAlert shareAlert] hiddenHUD];
             if ([dicInfo[@"result"] intValue] == 1){
@@ -268,11 +269,6 @@
                 [vc.navigationItem setHidesBackButton:TRUE animated:NO];
                 
                 [self.navigationController pushViewController:vc animated:NO];
-                
-                
-              
-                NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:@{NODE_USER_NAME:self.nameTextField.text,NODE_PASSWORD:[self.passTextField.text md5String],NODE_DOMAIN:@"9000"}];
-                [[SocketOprationData shareInit] sendReqDataWithValueDic:dict tag:PTL_CMD_LOGIN objecte:self call:@selector(loginResult:)];
             }
             else{
                 [WDAlert showAlertWithMessage:@"登录失败" time:1.];

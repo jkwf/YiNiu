@@ -163,6 +163,16 @@ static NSString *cellIndentifier = @"cell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     self.navigationController.navigationBar.barTintColor= [UIColor blackColor];
 
     // Do any additional setup after loading the view.
@@ -214,6 +224,18 @@ static NSString *cellIndentifier = @"cell";
 //    }];
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 #pragma mark === 返回多少分区====
 -(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
