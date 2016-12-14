@@ -158,6 +158,9 @@ static NSString *cellIndentifier = @"cell";
 }
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    [self loginWithIm];
+    
+    
     self.topView.userNameLabel.text = LoginNickName;
 }
 
@@ -429,17 +432,28 @@ static NSString *cellIndentifier = @"cell";
             break;
     }
 }
+- (void)loginWithIm{
+    
+    
+    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:@{NODE_USER_NAME:LoginUserName,NODE_PASSWORD:[LoginPassword md5String],NODE_DOMAIN:@"9000"}];
+    [[SocketOprationData shareInit] sendReqDataWithValueDic:dict tag:PTL_CMD_LOGIN objecte:self call:@selector(loginResult:)];
+    
+    
+}
 
 - (void)loginResult:(NSDictionary *)dic{
     int r = [dic[NODE_RESULT_NAME] intValue];
     if (r == 1){
-        FirewoodViewController *firewoodVc = [[FirewoodViewController alloc]init];
-        [self.navigationController pushViewController:firewoodVc animated:YES];
+        
+        SetLoginUserId(dic[@"sessionID"]);
+        SetLoginNickName(dic[@"nickname"]);
+        SetSynchronize;
+        
     }else{
         [AppHelper toastMessage:@{@"message":dic[NODE_ERR_NAME]}];
-        
     }
 }
+
 
 
 
