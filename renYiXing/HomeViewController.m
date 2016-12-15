@@ -167,15 +167,6 @@ static NSString *cellIndentifier = @"cell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
     self.navigationController.navigationBar.barTintColor= [UIColor blackColor];
 
     // Do any additional setup after loading the view.
@@ -203,8 +194,13 @@ static NSString *cellIndentifier = @"cell";
     self.topView = [[DiyView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height/9)];
     self.topView.backgroundColor = [UIColor whiteColor];
 //    self.topView.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.topView.headView setImage:[UIImage imageNamed:@"headImage"]];
     
+    self.topView.headView.image=[UIImage imageWithData:fetchFile];
+    if (!self.topView.headView.image)
+    {
+        [self.topView.headView setImage:[UIImage imageNamed:@"headImage"]];
+    }
+
     [self.view addSubview:self.topView];
    
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapAction:)];
@@ -227,18 +223,6 @@ static NSString *cellIndentifier = @"cell";
 //    }];
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 #pragma mark === 返回多少分区====
 -(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
@@ -513,6 +497,11 @@ static NSString *cellIndentifier = @"cell";
 {
     MyViewController *myVc = [[MyViewController alloc]init];
     myVc.userName = self.topView.userNameLabel.text;
+    myVc.myBlock=^(UIImage *headerImage){
+    
+        self.topView.headView.image=headerImage;
+        
+    };
     [self.navigationController pushViewController:myVc animated:YES];
     
 }
@@ -593,10 +582,6 @@ static NSString *cellIndentifier = @"cell";
     //    page的当前值 ＝ 大的scrollview偏移量 / 视图本身的宽度
     tempPage.currentPage = scrollView.contentOffset.x/self.view.frame.size.width;
 }
-
-
-
-
 
 
 

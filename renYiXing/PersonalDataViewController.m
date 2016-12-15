@@ -39,7 +39,9 @@
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     self.nameLabel.text = LoginNickName;
-}
+  }
+
+
 -(void)viewDidLoad
 {
     self.view.backgroundColor = [UIColor colorWithRed:229/255.0 green:231/255.0 blue:232/255.0 alpha:1.0];
@@ -70,9 +72,13 @@
     headlabel.translatesAutoresizingMaskIntoConstraints = NO;
     headlabel.text = @"头像";
     [topView addSubview:headlabel];
-    
     self.topView = [[UIImageView alloc]init];
-    self.topView.image =[UIImage imageNamed:@"headImage"];
+    self.topView.image=[UIImage imageWithData:fetchFile];
+    if (!self.topView.image)
+    {
+        self.topView.image =[UIImage imageNamed:@"headImage"];
+    }
+
     self.topView.translatesAutoresizingMaskIntoConstraints = NO;
     [topView addSubview:self.topView];
     
@@ -157,6 +163,18 @@
 -(void)tap1Action:(UITapGestureRecognizer *)tap
 {
     HeadImageViewController *headVc = [[HeadImageViewController alloc]init];
+    
+    headVc.headerImageBlock=^(UIImage *headerImage){
+    
+        self.topView.image=headerImage;
+        
+        if (_personalDataBlock)
+        {
+            _personalDataBlock(headerImage);
+        }
+        
+    };
+    
     [self.navigationController pushViewController:headVc animated:NO];
     NSLog(@"1");
 }
@@ -167,6 +185,19 @@
     nameVc.textName = self.nameLabel.text;
     [self.navigationController pushViewController:nameVc animated:NO];
     NSLog(@"2");
+}
+#pragma mark 头像地址
+- (NSString *)headerImgFilePathWithImgName{
+    
+    NSArray* paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    
+    NSString* documentsDirectory = [paths objectAtIndex:0];
+    
+    NSString* fullPathToFile = [documentsDirectory stringByAppendingPathComponent:@"userHeader.png"];
+    
+//    NSLog(@"------=========%@",fullPathToFile);
+    
+    return fullPathToFile;
 }
 
 

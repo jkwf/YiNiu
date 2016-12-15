@@ -10,4 +10,10 @@
 
 @interface HeadImageViewController : UIViewController
 
+@property(nonatomic , strong)UIImageView *headImageView;
+
+@property(nonatomic,strong)NSString *imageURL;
+
+@property(nonatomic,copy)void(^headerImageBlock)(UIImage *headerImage);
+
 @end

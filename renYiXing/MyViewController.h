@@ -9,5 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface MyViewController : UIViewController
+
 @property(nonatomic , strong)NSString *userName;
+
+@property(nonatomic,copy)void(^myBlock)(UIImage *headerImage);
+
 @end

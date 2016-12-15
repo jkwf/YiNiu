@@ -152,9 +152,9 @@
 #define SetLoginUserId(UserId) [[NSUserDefaults standardUserDefaults] setObject:(UserId?:@"") forKey:@"userID"]
 #define SetSynchronize [[NSUserDefaults standardUserDefaults] synchronize]
 
+#define saveFile(value) [[NSUserDefaults standardUserDefaults]setObject:(value) forKey:@"userHeaderImage"]
 
-
-
+#define fetchFile  [[NSUserDefaults standardUserDefaults] objectForKey:@"userHeaderImage"]
 
 #import "NSString+appendToHttpUrl.h"
 

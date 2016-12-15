@@ -8,12 +8,8 @@
 
 #import "HeadImageViewController.h"
 #import "Header.h"
-
+#import "PersonalViewController.h"
 @interface HeadImageViewController()<UIImagePickerControllerDelegate,UINavigationControllerDelegate>
-
-@property(nonatomic , strong)UIImageView *headImageView;
-
-@property(nonatomic,strong)NSString *imageURL;
 
 @end
 
@@ -21,26 +17,22 @@
 -(void)viewDidLoad
 {
     self.view.backgroundColor = [UIColor colorWithRed:229/255.0 green:231/255.0 blue:232/255.0 alpha:1.0];
-    //    self.navigationController.navigationBar.translucent = NO;
     UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 100, 30)];
-    //    titleLabel.backgroundColor = [UIColor greenColor];
     titleLabel.text = @"个人资料";
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.textColor = [UIColor whiteColor];
     self.navigationItem.titleView = titleLabel;
-    //    self.navigationController.navigationBar.barTintColor= [UIColor blackColor];
-    
-    
-//    UIImage  *image =[[UIImage imageNamed:@"leftback"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-//    UIBarButtonItem *leftBarButton = [[UIBarButtonItem alloc]initWithImage:image style:UIBarButtonItemStylePlain target:self action:@selector(leftBarButtonAction)];
-//    self.navigationItem.leftBarButtonItem = leftBarButton;
     
     UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc]initWithTitle:@"保存" style:UIBarButtonItemStylePlain target:self action:@selector(saveAction)];
     rightBarButton.tintColor = [UIColor whiteColor];
     self.navigationItem.rightBarButtonItem = rightBarButton;
-    
-    
-    self.headImageView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"changehead"]];
+
+    self.headImageView = [[UIImageView alloc]init];
+       self.headImageView.image=[UIImage imageWithData:fetchFile];
+    if (!self.headImageView.image)
+    {
+        self.headImageView.image=[UIImage imageNamed:@"changehead"];
+    }
     self.headImageView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:self.headImageView];
     
@@ -86,8 +78,7 @@
         make.height.mas_equalTo(self.view.bounds.size.width/11);
     }];
     
-
-}
+ }
 
 -(void)photoAction:(UIButton *)btn
 {
@@ -144,38 +135,41 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     
-    NSLog(@"------>%@",info);
-
-    
     UIImage *image= [info objectForKey:@"UIImagePickerControllerEditedImage"];
-    
-    [self saveImage:image WithName:@"userHeader.png"];
     
     if (picker.sourceType == UIImagePickerControllerSourceTypeCamera)
     {
         UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
     }
     self.headImageView.image = image;
-    
    // 模态返回
     [self dismissViewControllerAnimated:YES completion:nil];
 
-    
-    
+
 }
+
+
 
 -(void)saveAction{
     
-    Wself
     [WebShareData uploadImg:self.headImageView.image withImgName:@"picture" withFileName:@"userHeader.png" withParams:@{@"userid":LoginUserId} withUrlStr:getAPIURL(@"mod=interface&ac=modifiedpic") withSuccessBlock:^(NSDictionary *dicInfo) {
         
         if ([dicInfo[@"result"] intValue] == 1) {
             [AppHelper toastMessage:@{@"message":@"上传成功"}];
             
-            Sself
             [WebShareData uploadImg:self.headImageView.image withImgName:@"picture" withFileName:@"userHeader.png" withParams:@{@"userid":LoginUserId} withUrlStr:getCircleAPIURL(@"mod=index&ac=modifiedpic") withSuccessBlock:^(NSDictionary *dicInfo) {
                 if ([dicInfo[@"result"] intValue] == 1) {
+                    
+                    NSData *data=UIImagePNGRepresentation(self.headImageView.image);
+                    saveFile(data);//图片存储
+                    SetSynchronize;
                     [AppHelper toastMessage:@{@"message":@"上传成功"}];
+                    if (_headerImageBlock)
+                    {
+                        _headerImageBlock(self.headImageView.image);
+                    }
+                    
+                    
                 }else{
                     [AppHelper toastMessage:@{@"message":@"提交失败，请重试"}];
                 }
@@ -190,7 +184,6 @@
         [AppHelper toastMessage:@{@"message":@"提交失败，请重试"}];
     }];
     
-    //看看能否识别改动
     
     
 }
@@ -199,16 +192,9 @@
 
 - (void)saveImage:(UIImage *)tempImage WithName:(NSString *)imageName{
     
-    
-    
-    
     NSData* imageData = UIImageJPEGRepresentation(tempImage, 0.5);
-    
-    
 
     [imageData writeToFile:[self headerImgFilePathWithImgName] atomically:NO];
-    
-    
     
 }
 
@@ -221,7 +207,7 @@
     
     NSString* fullPathToFile = [documentsDirectory stringByAppendingPathComponent:@"userHeader.png"];
     
-    NSLog(@"------=========%@",fullPathToFile);
+//    NSLog(@"------=========%@",fullPathToFile);
     
     return fullPathToFile;
 }
@@ -236,4 +222,6 @@
 {
     [self.navigationController popViewControllerAnimated:NO];
 }
+
+
 @end
