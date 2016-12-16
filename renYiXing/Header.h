@@ -22,7 +22,7 @@
 #import "UIViewController+Predicate.h"
 #import "UIColor+Wonderful.h"
 #import "AppDelegate.h"
-
+#import "SVProgressHUD.h"
 #define ApplicationDelegate ((AppDelegate*)[[UIApplication sharedApplication] delegate])
 
 #import "MainViewController.h"

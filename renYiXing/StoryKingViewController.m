@@ -43,21 +43,15 @@ static NSString *cellIndentifier = @"cell";
 
 -(void)viewDidLoad
 {
-//    self.view.backgroundColor = [UIColor colorWithRed:229/255.0 green:231/255.0 blue:232/255.0 alpha:1.0];
-    //    self.navigationController.navigationBar.translucent = NO;
+
     UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 100, 30)];
-    //    titleLabel.backgroundColor = [UIColor greenColor];
     titleLabel.text = @"段子王";
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.textColor = [UIColor whiteColor];
     self.navigationItem.titleView = titleLabel;
-    //    self.navigationController.navigationBar.barTintColor= [UIColor blackColor];
-    
-    
-    
     
     UIImage  *image1 =[[UIImage imageNamed:@"tianjia3"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc]initWithImage:image1 style:UIBarButtonItemStylePlain target:self action:@selector(rightBarButtonAction)];
+    UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc]initWithImage:image1 style:UIBarButtonItemStylePlain target:self action:@selector(rightBarButtonItemClick)];
     self.navigationItem.rightBarButtonItem = rightBarButton;
     
     [self setModel];
@@ -135,7 +129,7 @@ static NSString *cellIndentifier = @"cell";
     [self.navigationController popViewControllerAnimated:NO];
 }
 
--(void)rightBarButtonAction
+-(void)rightBarButtonItemClick
 {
     NSLog(@"123");
     AddStoryController *addVc = [[AddStoryController alloc]init];

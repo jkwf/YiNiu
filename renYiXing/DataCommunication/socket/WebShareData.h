@@ -43,4 +43,16 @@ typedef void(^WebRequestDataFail)(NSError *  error);
  */
 + (void)uploadImg:(UIImage *)img withImgName:(NSString *)imgName withFileName:(NSString *)fileName withParams:(NSDictionary *)params withUrlStr:(NSString *)urlStr withSuccessBlock:( WebRequestDataSuccess )successBlock withFailBlock:( WebRequestDataFail)failBlock;
 
+/**
+ 发布段子接口——params:上传所需参数、mutableArray:上传的图片数组,可以为空、urlStr：url地址 、successBlock：上传成功的信息回调、failBlock：上传失败的信息回调
+
+ @param params 上传所需参数，不能为空
+ @param mutableArray 上传的图片数组,可以为空
+ @param urlStr url地址,不能为空
+ @param successBlock 上传成功的信息回调
+ @param failBlock 上传失败的信息回调
+ */
++(void)uploadImageWithParams:( NSDictionary * _Nonnull )params withImageArray:( NSMutableArray  * _Nullable )mutableArray withUrlStr:(NSString * _Nonnull)urlStr withSuccessBlock:(_Nonnull WebRequestDataSuccess)successBlock withFailBlock:(_Nullable WebRequestDataFail)failBlock;
+
+
 @end

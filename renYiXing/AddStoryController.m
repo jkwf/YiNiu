@@ -8,16 +8,18 @@
 
 #import "AddStoryController.h"
 #import "UIView+SDAutoLayout.h"
+#import "CXXChooseImageViewController.h"
+#import "UITextView+WZB.h"  
+@interface AddStoryController ()<UITextViewDelegate,CXXChooseImageViewControllerDelegate>
 
-@interface AddStoryController ()<UITextViewDelegate>
+@property(nonatomic,strong)CXXChooseImageViewController *chooseImageVC;
+
+@property(nonatomic,strong)UITextView *textView;
 
 @end
 
 @implementation AddStoryController
-{
-    UITextView *_contentView;
-    UILabel *_placeholderLabel;
-}
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -30,102 +32,95 @@
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.textColor = [UIColor whiteColor];
     self.navigationItem.titleView = titleLabel;
-    //    self.navigationController.navigationBar.barTintColor= [UIColor blackColor];
-    
-    
-//    UIImage  *image =[[UIImage imageNamed:@"leftback"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-//    UIBarButtonItem *leftBarButton = [[UIBarButtonItem alloc]initWithImage:image style:UIBarButtonItemStylePlain target:self action:@selector(leftBarButtonAction)];
-//    self.navigationItem.leftBarButtonItem = leftBarButton;
-    
-//    UILabel *tempLabel = [[UILabel alloc]init];
-//    tempLabel.text = @"发布";
-//    tempLabel.textColor = [UIColor whiteColor];
+
     UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc]initWithTitle:@"发布" style:UIBarButtonItemStyleDone target:self action:@selector(rightBarButtonAction)];
     rightBarButton.tintColor = [UIColor whiteColor];
     
 //    调整textview的光标位置
     self.automaticallyAdjustsScrollViewInsets = false;
     
-    UIView *backView = [UIView new];
-    backView.backgroundColor = [UIColor whiteColor];
-    
-    UITextView *contentView = [UITextView new];
-//    contentView.backgroundColor = [UIColor greenColor];
-    _contentView = contentView;
-    _contentView.delegate = self;
-    [backView addSubview:_contentView];
-    
-    UILabel *templabel = [UILabel new];
-    templabel.text = @"内容（必填）";
-    templabel.textColor = [UIColor grayColor];
-    templabel.font = [UIFont systemFontOfSize:14];
-    _placeholderLabel = templabel;
-    [_contentView addSubview:_placeholderLabel];
-    
-    UIImageView *addImageView = [UIImageView new];
-    [addImageView setImage:[UIImage imageNamed:@"zhuanfa"]];
-//    addImageView.backgroundColor = [UIColor redColor];
-    [backView addSubview:addImageView];
-    
-    [self.view sd_addSubviews:@[backView]];
-    
-    
-    backView.sd_layout
-    .topSpaceToView(self.view,64)
-    .leftEqualToView(self.view)
-    .rightEqualToView(self.view)
-    .heightIs(self.view.bounds.size.height/2);
-    
-    _contentView.sd_layout
-    .leftSpaceToView(backView,10)
-    .rightSpaceToView(backView,10)
-    .topSpaceToView(backView,10)
-    .bottomSpaceToView(backView,15+self.view.bounds.size.height/9);
-    
-    _placeholderLabel.sd_layout
-    .leftSpaceToView(_contentView,5)
-    .topSpaceToView(_contentView,5)
-    .rightSpaceToView(_contentView,5)
-    .heightIs(15);
-    
-    addImageView.sd_layout
-    .leftSpaceToView(backView,15)
-    .topSpaceToView(_contentView,5)
-    .heightIs(self.view.bounds.size.height/9)
-    .widthIs(self.view.bounds.size.height/9);
-    
-    
-    
-    
-    
     self.navigationItem.rightBarButtonItem = rightBarButton;
-    // Do any additional setup after loading the view.
+
+    [self textView];
+    
+    CXXChooseImageViewController *imageVC=[[CXXChooseImageViewController alloc]init];
+    imageVC.delegate=self;
+    self.chooseImageVC=imageVC;
+    [self addChildViewController:imageVC];
+    
+    [imageVC setOrigin:CGPointMake(0, _textView.height+64) ItemSize:CGSizeMake(self.view.width*0.21,self.view.height*0.11) rowCount:4];
+    
+    [self.view addSubview:imageVC.view];
+    
+    imageVC.maxImageCount=9;
+    
 }
 
+-(UITextView*)textView{
+
+    if (!_textView)
+    {
+        _textView =[[UITextView alloc]initWithFrame:CGRectMake(0,64, self.view.width, 200)];
+        _textView.placeholder=@"内容（必填)";
+        _textView.placeholderColor=[UIColor blackColor];
+        [self.view addSubview:_textView];
+        
+    }
+    
+    return _textView;
+}
+
+
+- (void)chooseImageViewControllerDidChangeCollectionViewHeigh:(CGFloat)height{
+    
+    self.chooseImageVC.view.frame =  CGRectMake(0, 200, [[UIScreen mainScreen] bounds].size.width, height);
+    
+}
 
 -(void)leftBarButtonAction
 {
     [self.navigationController popViewControllerAnimated:NO];
 }
 
-
+#pragma mark --- 发布 ----
 -(void)rightBarButtonAction
 {
-    NSLog(@"fabu");
+  
+    if ([_textView.text isEqualToString:@""])
+    {
+        [SVProgressHUD showErrorWithStatus:@"内容不能为空"];
+        return;
+    }
+    [_textView resignFirstResponder];//收起键盘
+    [SVProgressHUD showWithStatus:@"正在发布"];
+    [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeBlack];
+    [WebShareData uploadImageWithParams:@{@"userid":LoginUserId,@"content":_textView.text} withImageArray: _chooseImageVC.dataArr withUrlStr:getAPIURL(@"mod=interface&ac=circle") withSuccessBlock:^(NSDictionary *dicInfo) {
+        NSLog(@"%@",dicInfo);
+        if ([[dicInfo objectForKey:@"result"]integerValue]==1)
+        {
+            [SVProgressHUD showSuccessWithStatus:@"发布成功"];
+            [SVProgressHUD dismissWithDelay:2.0 completion:^{
+                [self.navigationController popViewControllerAnimated:YES];
+                
+            }];
+        }
+        
+        
+    } withFailBlock:^(NSError *error) {
+        
+        NSLog(@"----error：%@",error);
+    }];
+    
 }
 
 - (void)textViewDidChange:(UITextView *)textView
 {
-    if (textView.text.length == 0) {
-        _placeholderLabel.text = @"内容（必填）";
-    }else{
-        _placeholderLabel.text = @"";
-    }
+    
 }
 
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
-    [_contentView resignFirstResponder];
+   
 }
 
 - (void)didReceiveMemoryWarning {

@@ -243,7 +243,40 @@
 }
 
 
++(void)uploadImageWithParams:(NSDictionary *)params withImageArray:(NSMutableArray *)mutableArray withUrlStr:(NSString *)urlStr withSuccessBlock:(WebRequestDataSuccess)successBlock withFailBlock:(WebRequestDataFail)failBlock
+{
 
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer=[AFHTTPResponseSerializer serializer];
+    manager.requestSerializer = [AFJSONRequestSerializer serializer];
+    manager.responseSerializer.acceptableContentTypes=[NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"text/html",@"image/png", nil];
+    
+    [manager POST:urlStr parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+        
+        for (NSInteger i=0; i<mutableArray.count; i++)
+        {
+            NSData *data=UIImagePNGRepresentation([mutableArray objectAtIndex:i]);
+            
+            [formData appendPartWithFileData:data name:[NSString stringWithFormat:@"%ld.png",(long)i] fileName:@"pic" mimeType:@"image/png"];
+        }
+        
+    } progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableLeaves error:nil];
+        successBlock(dic);
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        failBlock(error);
+        
+    }];
+    
+    
+
+    
+}
 
 
 
