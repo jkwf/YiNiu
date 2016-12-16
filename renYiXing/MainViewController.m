@@ -264,11 +264,11 @@
             if ([dicInfo[@"result"] intValue] == 1){
                 
                 
-                ApplicationDelegate.userLoginInfo = [dicInfo modelCopy];
-                FirstViewController *vc = [[FirstViewController alloc]init];
-                [vc.navigationItem setHidesBackButton:TRUE animated:NO];
                 
-                [self.navigationController pushViewController:vc animated:NO];
+                [self loginWithIm];
+                
+               
+                
             }
             else{
                 [WDAlert showAlertWithMessage:@"登录失败" time:1.];
@@ -283,8 +283,17 @@
 
 }
 
+- (void)loginWithIm{
+    
+    
+    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:@{NODE_USER_NAME:LoginUserName    ,NODE_PASSWORD:[LoginPassword md5String],NODE_DOMAIN:@"9000"}];
+    [[SocketOprationData shareInit] sendReqDataWithValueDic:dict tag:PTL_CMD_LOGIN objecte:self call:@selector(loginResult:)];
+    
+    
+}
+
 - (void)loginResult:(NSDictionary *)dic{
-   int r = [dic[NODE_RESULT_NAME] intValue];
+    int r = [dic[NODE_RESULT_NAME] intValue];
     if (r == 1){
         
         SetLoginUserId(dic[@"sessionID"]);
@@ -295,9 +304,9 @@
         [vc.navigationItem setHidesBackButton:TRUE animated:NO];
         
         [self.navigationController pushViewController:vc animated:NO];
-        //[self.navigationController pushViewController:[[FirstViewController alloc]init] animated:NO];
+        
     }else{
-        [self promptViewWithTitle:dic[NODE_ERR_NAME]];
+        [AppHelper toastMessage:@{@"message":dic[NODE_ERR_NAME]}];
     }
 }
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event

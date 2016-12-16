@@ -9,7 +9,7 @@
 #import "Websocket.h"
 //#import "TestViewController.h"
 #import "NSDictionary+YYAdd.h"
-#define WebSocketInvite @"ws://linux.joysw.cn:8080/yitongxun/voip?"
+#define WebSocketInvite @"ws://192.168.1.130:8080/yitongxun/voip?"
 @implementation Websocket
 +(id)shareInit{
     static SocketOprationData *sharedInstance = nil;
@@ -99,9 +99,13 @@
     dic[@"toId"] = userid;
     dic[@"fromId"] = [[SocketOprationData shareInit]loginInfo][@"userId"];
     dic[@"type"] = type;
-    dic[@"roomId"] = self.roomid;
+    
+    if ([event isEqualToString:WS_Event_Agree]) {
+        dic[@"roomId"] = [NSString stringWithFormat:@"%@%@",userid,self.roomid];
+        
+    }
     NSString *jsonString = [dic jsonStringEncoded];
-    NSLog(@"========%@",jsonString);
+    if ([self.socketInvite readyState] == SR_OPEN)
     [self.socketInvite send:jsonString];
 }
 

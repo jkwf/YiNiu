@@ -145,7 +145,7 @@
     
     NSMutableData *sendData = [[NSMutableData alloc]init];
     [sendData appendData:[strXmlTemp dataUsingEncoding:NSUTF8StringEncoding]];
-    NSLog(@"%ld %ld  sendxml:  %@",(unsigned long)strXmlTemp.length,sendData.length,strXmlTemp);
+    NSLog(@"%ld %ld  sendxml:  %@",(unsigned long)strXmlTemp.length,(unsigned long)sendData.length,strXmlTemp);
     
     
     [self.gcdSocket writeData:sendData withTimeout:-1 tag:cmdLogin];

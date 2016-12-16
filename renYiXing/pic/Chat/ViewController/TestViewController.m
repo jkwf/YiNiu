@@ -6,6 +6,9 @@
 //  Copyright © 2016年 ISBX. All rights reserved.
 //
 
+
+
+
 #import "TestViewController.h"
 #import <AVFoundation/AVFoundation.h>
 
@@ -119,7 +122,7 @@
     [_socket open];
 }
 - (void)initPeer{
-    //[self openSocket];
+//    [self openSocket];
     sdp = [self defaultPeerConnectionConstraints];
      _factory = [[RTCPeerConnectionFactory alloc] init];
     //@"turn:linux.joysw.cn:3478"
@@ -200,7 +203,14 @@
     [self.view addSubview:endBtn];
     
     if (self.iscall) {
-        [[Websocket shareInit] connectWithId:self.personDic[NODE_USERId] type:Invite_Type_Video event:WS_Event_Call];
+        
+        
+       
+        
+//        [[JoyIMSocial shareSocket] callUserVoiceWithFromId:[[JoyIMSocial shareSocket] sessionId] toId:(long)self.personDic.fid];
+        
+        
+        [[Websocket shareInit] connectWithId:self.personDic.fid type:Invite_Type_Video event:WS_Event_Call];
         endBtn.hidden = NO;
     }else{
         endBtn.hidden = YES;

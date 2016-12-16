@@ -32,6 +32,30 @@
     NSLog(@"--------%@",[self.window.rootViewController class]);
 }
 
+- (void)loginWithIm{
+    
+    
+    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:@{NODE_USER_NAME:LoginUserName    ,NODE_PASSWORD:[LoginPassword md5String],NODE_DOMAIN:@"9000"}];
+    [[SocketOprationData shareInit] sendReqDataWithValueDic:dict tag:PTL_CMD_LOGIN objecte:self call:@selector(loginResult:)];
+    
+    
+}
+
+- (void)loginResult:(NSDictionary *)dic{
+    int r = [dic[NODE_RESULT_NAME] intValue];
+    if (r == 1){
+        
+        SetLoginUserId(dic[@"sessionID"]);
+        SetLoginNickName(dic[@"nickname"]);
+        SetSynchronize;
+        
+    }else{
+        [AppHelper toastMessage:@{@"message":dic[NODE_ERR_NAME]}];
+    }
+}
+
+
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(showAlert) name:@"loginOutByAnother" object:nil];;
@@ -69,6 +93,7 @@
 //    BOOL isAutoLogin = [[EaseMob sharedInstance].chatManager isAutoLoginEnabled];
     
     if (LoginUserId){
+        [self loginWithIm];
         FirstViewController *firstVc = [[FirstViewController alloc]init];
         UINavigationController *rootNav = [[UINavigationController alloc]initWithRootViewController:firstVc];
         self.window.rootViewController = rootNav;

@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface TestViewController : UIViewController
-@property(nonatomic, strong)NSDictionary *personDic;
+@property(nonatomic, strong)UserInfo *personDic;
 @property (nonatomic, strong)NSString  *toId;
 @property (nonatomic, strong)NSString *roomId;
 @property (nonatomic) BOOL iscall;

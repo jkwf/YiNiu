@@ -119,12 +119,6 @@ static NSString *headerView = @"head";
     //    self.navigationController.navigationBar.barTintColor= [UIColor blackColor];
     
     
-//    UIImage  *image =[[UIImage imageNamed:@"leftback"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-//    UIBarButtonItem *leftBarButton = [[UIBarButtonItem alloc]initWithImage:image style:UIBarButtonItemStylePlain target:self action:@selector(leftBarButtonAction)];
-//    self.navigationItem.leftBarButtonItem = leftBarButton;
-//    
-//    UIBarButtonItem *rightBarButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"tianjia3"]  style:UIBarButtonItemStylePlain target:self action:@selector(addAction)];
-//    self.navigationItem.rightBarButtonItem = rightBarButton;
     
     UIButton *rightBarButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [rightBarButton setImage:[UIImage imageNamed:@"tianjia3"] forState:UIControlStateNormal];
@@ -158,31 +152,10 @@ static NSString *headerView = @"head";
 {
    
     
-//     [[EMClient sharedClient].contactManager addDelegate:self delegateQueue:nil];
+
     
     [self setModel];
-//    EMError *error = nil;
-//    NSArray *userlist = [[EMClient sharedClient].contactManager getContactsFromServerWithError:nil];
-//    if (!error) {
-//        NSLog(@"获取成功 -- %@",userlist);
-//        [self.modelArray addObjectsFromArray:userlist];
-//    }
-//    self.buddylist = [[EMClient sharedClient].contactManager getContactsFromDB];
-//    NSLog(@"self.buddylist == %@",self.buddylist);
-//    
-//    if (self.buddylist.count == 0) {
-//        /** 数据库没有好友记录 从服务器获取 */
-//        EMError *error = nil;
-//        self.buddylist = [[EMClient sharedClient].contactManager getContactsFromServerWithError:&error];
-//        NSLog(@"数据库没有好友记录 从服务器获取 --- %@",self.buddylist);
-//    }
-//    for (NSString *string in self.buddylist)
-//    {
-//        FirewoodModel *model = [[FirewoodModel alloc]init];
-//        model.userName = string;
-//        [self.modelArray addObject:model];
-//    }
-//    
+
     
     
     self.firewoodTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height) style:UITableViewStyleGrouped];

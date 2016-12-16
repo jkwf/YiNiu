@@ -72,7 +72,7 @@
 #import "BaseViewController.h"
 #import "NSObject+CompleteFunction.h"
 
-
+#import "JoyIMSocial.h"
 
 
 

@@ -265,64 +265,6 @@ static NSString *cellIndentifier = @"cell";
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-   /* StoryKingViewController *storykingVc = [[StoryKingViewController alloc]init];
-    InvestClinicViewController *investClinicVc = [[InvestClinicViewController alloc]init];
-    ReadingViewController *readingVc = [[ReadingViewController alloc]init];
-    TrainingVideoViewController *trainingVideoVc = [[TrainingVideoViewController alloc]init];
-    BabySpaceViewController *babySpaceVc = [[BabySpaceViewController alloc]init];
-    MasterSpaceViewController *masterSpaceVc = [[MasterSpaceViewController alloc]init];
-    WithdrawDepositViewController *withdrawDepositVc = [[WithdrawDepositViewController alloc]init];
-    PerformanceViewController *performanceVc = [[PerformanceViewController alloc]init];
-    StrategicRankingViewController *strategicRankingVc = [[StrategicRankingViewController alloc]init];
-    FirewoodViewController *firewoodVc = [[FirewoodViewController alloc]init];
-//    FriendListViewController *friendVc = [[FriendListViewController alloc]init];
-    RankingViewController *rankingVc = [[RankingViewController alloc]init];
-    StrategicTradingViewController *strategicTradingVc = [[StrategicTradingViewController alloc]init];
-    
-    switch (indexPath.row) {
-        case 0:
-            [self.navigationController pushViewController:strategicTradingVc animated:YES];
-            break;
-        case 1:
-            [self.navigationController pushViewController:rankingVc animated:YES];
-            break;
-        case 2:
-            [self.navigationController pushViewController:firewoodVc animated:YES];
-            break;
-        case 3:
-            [self.navigationController pushViewController:strategicRankingVc animated:YES];
-            break;
-        case 4:
-            [self.navigationController pushViewController:performanceVc animated:YES];
-            break;
-        case 5:
-            [self.navigationController pushViewController:withdrawDepositVc animated:YES];
-            break;
-        case 6:
-            [self.navigationController pushViewController:masterSpaceVc animated:YES];
-            break;
-        case 7:
-            [self.navigationController pushViewController:babySpaceVc animated:YES];
-//            [self.navigationController presentViewController:babySpaceVc animated:NO completion:nil];
-            break;
-        case 8:
-            [self.navigationController pushViewController:trainingVideoVc animated:YES];
-//            [self.navigationController presentViewController:trainingVideoVc animated:NO completion:nil];
-            break;
-        case 9:
-            [self.navigationController pushViewController:readingVc animated:YES];
-//            [self.navigationController presentViewController:readingVc animated:NO completion:nil];
-            break;
-        case 10:
-            [self.navigationController pushViewController:investClinicVc animated:YES];
-//            [self.navigationController presentViewController:investClinicVc animated:NO completion:nil];
-            break;
-        case 11:
-            [self.navigationController pushViewController:storykingVc animated:YES];
-            break;
-        default:
-            break;
-    }*/
     
     switch (indexPath.row) {
         case 0:
@@ -343,8 +285,7 @@ static NSString *cellIndentifier = @"cell";
         }
             break;
         case 2:{
-//            NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:@{NODE_USER_NAME:LoginUserName,NODE_PASSWORD:[LoginPassword md5String],NODE_DOMAIN:@"9000"}];
-//            [[SocketOprationData shareInit] sendReqDataWithValueDic:dict tag:PTL_CMD_LOGIN objecte:self call:@selector(loginResult:)];
+
             FirewoodViewController *firewoodVc = [[FirewoodViewController alloc]init];
             [self.navigationController pushViewController:firewoodVc animated:YES];
             

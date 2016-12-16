@@ -24,6 +24,9 @@
 #import<AVFoundation/AVMediaFormat.h>
 #import "TestViewController.h"
 #import "DealPictureMode.h"
+#import "Websocket.h"
+
+
 #define NavigationBarH      CGRectGetMaxY(self.navigationController.navigationBar.frame)
 
 @interface SChatVC ()<UITableViewDelegate,UITableViewDataSource,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
@@ -98,6 +101,13 @@
     [self initPopButton];
     self.edgesForExtendedLayout = UIRectEdgeNone;
     self.extendedLayoutIncludesOpaqueBars = YES;
+    
+    
+    
+    
+    
+    
+    
     
     _dataArr = [NSMutableArray array];
     
@@ -443,13 +453,20 @@
     if (actionSheet.tag == 2) {
         if (buttonIndex == 0) {
             
+            
+            
+            
             TestViewController *vc = [[TestViewController alloc] init];
             vc.personDic = self.personDic;
             vc.iscall = YES;
             vc.isVideo = YES;
             UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
             [self presentViewController:nav animated:YES completion:nil];
+            
+            
         }else if (buttonIndex == 1) {
+            
+            NSLog(@"===33333333333===============================");
             TestViewController *vc = [[TestViewController alloc] init];
             vc.personDic = self.personDic;
             vc.iscall = YES;
@@ -535,10 +552,22 @@
     [self.chatTable insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:_dataArr.count-1 inSection:0]] withRowAnimation:UITableViewRowAnimationRight];
     [self scrrollToEnd];
 //    [self layoutAfterInsertRow];
-    NSString *name = [NSString stringWithFormat:@"%d.jpg",(int)[NSDate date].timeIntervalSince1970];
-    NSString *path = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES).firstObject stringByAppendingPathComponent:name];
-    [UIImageJPEGRepresentation(image, 1.0) writeToFile:path atomically:YES];
+    
+    
+    NSString *name = [NSString stringWithFormat:@"%d.png",(int)[NSDate date].timeIntervalSince1970];
+    
+    NSString *path = [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:name];
+    
+    [UIImageJPEGRepresentation(image, 1.0)  writeToFile:path atomically:YES];
+    
     NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:@{NODE_TO_ID:self.personDic.fid,@"fileUrl":[NSURL fileURLWithPath:path].absoluteString,@"action":@"send",@"sort":@"offline",@"fileType":MessageTypePicture,@"code":@"utf8",@"msgSubType":@"imMsg"}];
+    
+    
+    
+//    NSString *path = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES).firstObject stringByAppendingPathComponent:name];
+//    [UIImageJPEGRepresentation(image, 1.0) writeToFile:path atomically:YES];
+//    NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:@{NODE_TO_ID:self.personDic.fid,@"fileUrl":[NSURL fileURLWithPath:path].absoluteString,@"action":@"send",@"sort":@"offline",@"fileType":MessageTypePicture,@"code":@"utf8",@"msgSubType":@"imMsg"}];
+    
     
     [[FileSocket shareInit] sendReqDataWithValueDic:dic tag:PTL_CMD_SEND_FILE objecte:self call:@selector(finishUpLoad:)];
 
@@ -547,6 +576,11 @@
     [self performSelector:@selector(sendNetworkMessage:) withObject:@{@"start":@0,@"success":@1,@"failed":@0,@"data":imgModel,@"dataClass":imgModel.class} afterDelay:2];
 }
 - (void)finishUpLoad:(id)obj{
+    
+    
+    
+    
+    
     NSLog(@"-------------%@",obj);
 }
 /**
@@ -633,6 +667,7 @@
     }];
 }
 - (void)sendFinish:(NSDictionary *)dic{
+    
     int n = [dic[NODE_RESULT_NAME] intValue];
     if (n!= 1) {
         [WDAlert showAlertWithMessage:@"发送失败" time:1.5];
@@ -717,6 +752,7 @@
             [self layoutAfterInsertRow];
             GroupMsg *msg = [[GroupMsg alloc] init];
             msg.groupID = self.personDic.fid;
+            msg.sessionID = LoginUserId;
             msg.type = PTL_REQ;
             msg.cmd = PTL_CMD_GroupMsg;
             msg.msg = text;
@@ -725,7 +761,8 @@
             msg.sessionID = [[SocketOprationData shareInit] sessionID];
             [[SocketOprationData shareInit] sendReqDataWithObj:msg tag:PTL_CMD_GroupMsg objecte:self call:@selector(sendFinish:)];
             
-            
+//            NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:@{NODE_TO_ID:self.personDic.fid,NODE_TOUSERNAME:self.personDic.nickname,NODE_MSG:text,@"code":@"utf8",@"msgSubType":@"imMsg"}];
+//            [[SocketOprationData shareInit] sendReqDataWithValueDic:dic tag:PTL_CMD_SEND_MSG objecte:self call:@selector(sendFinish:)];
             
         }else if ([eventName isEqualToString:@"SChatToolBarRecordDidFinishEvent"]) {
             // 发送语音

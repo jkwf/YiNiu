@@ -781,13 +781,14 @@ static __strong NSData *CRLFCRLF;
     [self _pumpWriting];
 }
 
-- (void)send:(id)data;
-{
+- (void)send:(id)data;{
     NSAssert(self.readyState != SR_CONNECTING, @"Invalid State: Cannot call send: until connection is open");
     // TODO: maybe not copy this for performance
     data = [data copy];
+    
     dispatch_async(_workQueue, ^{
         if ([data isKindOfClass:[NSString class]]) {
+            
             [self _sendFrameWithOpcode:SROpCodeTextFrame data:[(NSString *)data dataUsingEncoding:NSUTF8StringEncoding]];
         } else if ([data isKindOfClass:[NSData class]]) {
             [self _sendFrameWithOpcode:SROpCodeBinaryFrame data:data];
