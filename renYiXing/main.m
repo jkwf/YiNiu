@@ -19,6 +19,7 @@ NSString *getCircleAPIURL(NSString *api)
 NSString *getBannerUrl(NSString *api){
     return [NSString stringWithFormat:@"%@%@",BaseBannerImgUrl,api];
 }
+
 int main(int argc, char * argv[]) {
     @autoreleasepool {
         return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));

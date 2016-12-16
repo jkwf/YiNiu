@@ -11,7 +11,7 @@
 #import "Masonry.h"
 #import "Header.h"
 #import "MyTableViewCell.h"
-
+#import "HeadImageViewController.h"
 @interface MyViewController()<UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic , strong)DiyView *topView;
 @property(nonatomic , strong)DiyView *personalView;
@@ -137,9 +137,12 @@ static NSString *cellIndentifier = @"cell";
     
     self.topView = [[DiyView alloc]initWithFrame:CGRectMake(0, 64, self.view.bounds.size.width, self.view.bounds.size.height/9)];
     self.topView.backgroundColor = [UIColor whiteColor];
-    //    self.topView.translatesAutoresizingMaskIntoConstraints = NO;
-    
-    [self.topView.headView setImage:[UIImage imageNamed:@"headImage"]];
+    self.topView.headView.image=[UIImage imageWithData:fetchFile];
+    if (!self.topView.headView.image)
+    {
+        [self.topView.headView setImage:[UIImage imageNamed:@"headImage"]];
+    }
+
     [self.view addSubview:self.topView];
   
     
@@ -435,6 +438,17 @@ static NSString *cellIndentifier = @"cell";
 {
     PersonalDataViewController *personalDataVc = [[PersonalDataViewController alloc]init];
     personalDataVc.UserName = self.topView.userNameLabel.text;
+    personalDataVc.personalDataBlock=^(UIImage *headerImage){
+        
+        self.topView.headView.image=headerImage;
+        
+        if (_myBlock)
+        {
+            _myBlock(headerImage);
+        }
+        
+        
+    };
     [self.navigationController pushViewController:personalDataVc animated:NO];
     NSLog(@"gerenziliao");
 
@@ -444,5 +458,7 @@ static NSString *cellIndentifier = @"cell";
 {
     [self.navigationController popViewControllerAnimated:YES];
 }
+
+
 
 @end
